@@ -12,7 +12,12 @@ import { Link } from "@/components/ui/link";
 import { Text } from "@/components/ui/text";
 import { View } from "@/components/ui/view";
 import { useColor } from "@/hooks/useColor";
-import { AlignLeft, SeparatorHorizontal, Terminal } from "lucide-react-native";
+import {
+  AlignLeft,
+  BadgePlus,
+  SeparatorHorizontal,
+  Terminal,
+} from "lucide-react-native";
 import { useDb } from "@/db/provider";
 import { activities, type Activity } from "@/db/schema";
 import { ScrollView } from "@/components/ui/scroll-view";
@@ -20,6 +25,7 @@ import { useEffect, useState } from "react";
 import { useLiveQuery } from "drizzle-orm/expo-sqlite";
 import { BORDER_RADIUS } from "@/theme/globals";
 import { activityCategories } from "@/components/sheet";
+import { and, gte, lt } from "drizzle-orm";
 
 export default function HomeScreen() {
   const green = useColor("green");
@@ -30,6 +36,37 @@ export default function HomeScreen() {
 
   const [localActivities, setLocalActivities] = useState<Activity[]>([]);
   const { data } = useLiveQuery(db.select().from(activities));
+
+  const now = new Date();
+
+  const timestamp = now.toISOString();
+
+  const start = new Date(now);
+  const end = new Date(now);
+
+  if (now.getUTCMinutes() < 30) {
+    start.setUTCMinutes(0, 0, 0);
+
+    end.setUTCMinutes(30, 0, 0);
+  } else {
+    start.setUTCMinutes(30, 0, 0);
+
+    end.setUTCHours(now.getUTCHours() + 1, 0, 0, 0);
+    end.setUTCMinutes(0, 0, 0);
+  }
+
+  const { data: lastActivity } = useLiveQuery(
+    db
+      .select()
+      .from(activities)
+      .where(
+        and(
+          gte(activities.timestamp, start.toISOString()),
+          lt(activities.timestamp, end.toISOString()),
+        ),
+      )
+      .limit(1),
+  );
 
   const addActivity = async () => {
     await db.insert(activities).values({
@@ -67,8 +104,8 @@ export default function HomeScreen() {
   const getTimeIntervalFromTimestamp = (timestamp: string) => {
     const activityDate = new Date(timestamp);
 
-    const hours = activityDate.getUTCHours();
-    const minutes = activityDate.getUTCMinutes();
+    const hours = activityDate.getHours();
+    const minutes = activityDate.getMinutes();
 
     if (minutes <= 30) {
       return `${hours}:00 - ${hours}:30`;
@@ -80,7 +117,6 @@ export default function HomeScreen() {
     <View style={{ flex: 1, gap: 16, padding: 24, justifyContent: "center" }}>
       <View
         style={{
-          height: 150,
           borderWidth: 1,
           borderColor: card,
           borderRadius: BORDER_RADIUS,
@@ -115,15 +151,46 @@ export default function HomeScreen() {
                 fontFamily: "Roboto",
               }}
             >
-              {getTimeIntervalFromTimestamp(
-                data[data.length - 1].timestamp || "",
-              )}
+              {getTimeIntervalFromTimestamp(Date())}
             </Text>
-            <View
+
+            {lastActivity && lastActivity.length > 0 ? (
+              <Text
+                style={{
+                  alignSelf: "flex-start",
+                  fontSize: 20,
+                  fontWeight: "700",
+                  fontFamily: "Roboto",
+                }}
+              >
+                {lastActivity[0].name}
+              </Text>
+            ) : (
+              <Link asChild href="/sheet">
+                <Card
+                  style={{
+                    borderWidth: 2,
+                    borderColor: "lightgray",
+                    borderRadius: 20,
+                    height: 150,
+                  }}
+                >
+                  <CardContent
+                    style={{
+                      flex: 1,
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Icon name={BadgePlus} size={48} color={primary} />
+                  </CardContent>
+                </Card>
+              </Link>
+            )}
+
+            {/*<View
               key={data[data.length - 1].id}
               style={{
-                width: 300,
-                height: 150,
                 backgroundColor:
                   activityCategories.find(
                     (cat) => cat.name === data[data.length - 1].name,
@@ -147,7 +214,7 @@ export default function HomeScreen() {
               <Text>
                 {getAgoTextFromTimestamp(data[data.length - 1].timestamp || "")}
               </Text>
-            </View>
+            </View>*/}
           </View>
         )}
         {/* </ScrollView> */}
