@@ -11,7 +11,7 @@ import {
 } from 'expo-router/unstable-native-tabs';
 
 export default function TabsLayout() {
-  const red = useColor('red');
+  const accent = useColor('accent');
   const primary = useColor('primary');
   const foreground = useColor('foreground');
 
@@ -26,7 +26,7 @@ export default function TabsLayout() {
         default: primary,
         selected: foreground,
       }}
-      badgeBackgroundColor={red}
+      badgeBackgroundColor={accent}
       labelVisibilityMode='labeled'
       disableTransparentOnScrollEdge={true}
     >
@@ -48,7 +48,6 @@ export default function TabsLayout() {
           ),
         })}
         <Label>Settings</Label>
-        <Badge>1</Badge>
       </NativeTabs.Trigger>
 
       <NativeTabs.Trigger

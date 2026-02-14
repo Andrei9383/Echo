@@ -7,22 +7,11 @@ import { useState } from "react";
 import { useDb } from "@/db/provider";
 import { activities } from "@/db/schema";
 import { router } from "expo-router";
-import { opacity } from "react-native-reanimated/lib/typescript/Colors";
 
 export default function SheetScreen() {
   const [subcategory, setSubcategory] = useState<string>("");
   const db = useDb();
 
-  function foregroundContrast(color: string): string {
-    const hex = color.replace("#", "");
-    const r = parseInt(hex.substring(0, 2), 16);
-    const g = parseInt(hex.substring(2, 4), 16);
-    const b = parseInt(hex.substring(4, 6), 16);
-
-    const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-    // return luminance > 0.5 ? "#000000" : "#FFFFFF";
-    return "#FFFFFF";
-  }
   return (
     <ScrollView
       contentInsetAdjustmentBehavior="automatic"
@@ -32,14 +21,11 @@ export default function SheetScreen() {
         paddingBottom: 100,
       }}
     >
-      {/* <Text variant="heading" style={{ marginBottom: 16 }}>
-        BNA UI
-      </Text> */}
       <View
         style={{
           display: "flex",
           flexDirection: "row",
-          gap: 8,
+          gap: 10,
           flexWrap: "wrap",
           marginBottom: 8,
           alignContent: "space-evenly",
@@ -50,15 +36,11 @@ export default function SheetScreen() {
           activityCategories.map((item, index) => (
             <ActivityButton
               key={index}
-              style={{
-                marginVertical: 2,
-                backgroundColor: item.color + "2F",
-                borderColor: item.color + "FF",
-              }}
+              emoji={item.emoji}
+              label={item.name}
+              color={item.color}
               onPress={() => setSubcategory(item.id)}
-            >
-              <Text>{item.name}</Text>
-            </ActivityButton>
+            />
           ))
         ) : (
           <>
@@ -67,19 +49,18 @@ export default function SheetScreen() {
               onPress={() => setSubcategory("")}
               style={{ marginBottom: 16 }}
             >
-              Back
+              ← Back
             </Button>
             {activityCategories
               .find((cat) => cat.id === subcategory)
               ?.sub_activities.map((subItem, subIndex) => (
                 <ActivityButton
                   key={subIndex}
-                  style={{
-                    marginVertical: 2,
-                    backgroundColor:
-                      activityCategories.find((cat) => cat.id === subcategory)
-                        ?.color + "2F",
-                  }}
+                  label={subItem}
+                  color={
+                    activityCategories.find((cat) => cat.id === subcategory)
+                      ?.color
+                  }
                   onPress={() => {
                     db.insert(activities)
                       .values({
@@ -91,9 +72,7 @@ export default function SheetScreen() {
                         router.back();
                       });
                   }}
-                >
-                  <Text>{subItem}</Text>
-                </ActivityButton>
+                />
               ))}
           </>
         )}
@@ -106,6 +85,7 @@ export const activityCategories = [
   {
     id: "work_career",
     name: "Work & Career",
+    emoji: "💼",
     color: "#3B82F6",
     color_name: "Focus Blue",
     sub_activities: [
@@ -124,6 +104,7 @@ export const activityCategories = [
   {
     id: "health_fitness",
     name: "Health & Fitness",
+    emoji: "💪",
     color: "#10B981",
     color_name: "Emerald Green",
     sub_activities: [
@@ -141,6 +122,7 @@ export const activityCategories = [
   {
     id: "biological_needs",
     name: "Biological Needs",
+    emoji: "😴",
     color: "#A5B4FC",
     color_name: "Calm Periwinkle",
     sub_activities: [
@@ -156,6 +138,7 @@ export const activityCategories = [
   {
     id: "food_drink",
     name: "Food & Drink",
+    emoji: "🍽️",
     color: "#F97316",
     color_name: "Vibrant Orange",
     sub_activities: [
@@ -170,7 +153,8 @@ export const activityCategories = [
   },
   {
     id: "development_learning",
-    name: "Personal Development",
+    name: "Personal Dev",
+    emoji: "🧠",
     color: "#8B5CF6",
     color_name: "Wisdom Violet",
     sub_activities: [
@@ -186,7 +170,8 @@ export const activityCategories = [
   },
   {
     id: "social_relationships",
-    name: "Social & Relationships",
+    name: "Social",
+    emoji: "👥",
     color: "#EC4899",
     color_name: "Connection Pink",
     sub_activities: [
@@ -202,7 +187,8 @@ export const activityCategories = [
   },
   {
     id: "chores_home",
-    name: "Chores & Home Maintenance",
+    name: "Chores & Home",
+    emoji: "🏠",
     color: "#D97706",
     color_name: "Bronze/Brown",
     sub_activities: [
@@ -219,7 +205,8 @@ export const activityCategories = [
   },
   {
     id: "transit_commute",
-    name: "Transit & Commute",
+    name: "Transit",
+    emoji: "🚗",
     color: "#64748B",
     color_name: "Slate Grey",
     sub_activities: [
@@ -234,7 +221,8 @@ export const activityCategories = [
   },
   {
     id: "leisure_recreation",
-    name: "Leisure & Recreation",
+    name: "Leisure",
+    emoji: "🎮",
     color: "#EAB308",
     color_name: "Sunshine Yellow",
     sub_activities: [
@@ -250,7 +238,8 @@ export const activityCategories = [
   },
   {
     id: "digital_consumption",
-    name: "Digital Consumption",
+    name: "Digital",
+    emoji: "📱",
     color: "#6366F1",
     color_name: "Screen Indigo",
     sub_activities: [
@@ -266,6 +255,7 @@ export const activityCategories = [
   {
     id: "idle_waste",
     name: "Idle / Low Energy",
+    emoji: "💤",
     color: "#EF4444",
     color_name: "Alert Red",
     sub_activities: [
@@ -277,59 +267,4 @@ export const activityCategories = [
       "Searching for Lost Items",
     ],
   },
-];
-
-const bnaComponents = [
-  "🪗 Accordion",
-  "📜 Action Sheet",
-  "🚨 Alert",
-  "💬 Alert Dialog",
-  "🎧 Audio Player",
-  "🎙️ Audio Recorder",
-  "🌊 Audio Waveform",
-  "👤 Avatar",
-  "🎯 AvoidKeyboard",
-  "🏷️ Badge",
-  "📥 BottomSheet",
-  "🔘 Button",
-  "📸 Camera",
-  "🎥 Camera Preview",
-  "🃏 Card",
-  "🎠 Carousel",
-  "☑️ Checkbox",
-  "📂 Collapsible",
-  "🎨 Color Picker",
-  "🔽 Combobox",
-  "📅 Date Picker",
-  "📁 File Picker",
-  "🖼️ Gallery",
-  "👋 Hello Wave",
-  "⭐ Icon",
-  "🖼️ Image",
-  "⌨️ Input",
-  "🔢 Input OTP",
-  "🔗 Link",
-  "🎞️ MediaPicker",
-  "🌙 Mode Toggle",
-  "🚀 Onboarding",
-  "🪟 ParallaxScrollView",
-  "🎚️ Picker",
-  "💭 Popover",
-  "📊 Progress",
-  "🔘 Radio",
-  "📜 ScrollView",
-  "🔍 SearchBar",
-  "➖ Separator",
-  "📤 Share",
-  "📄 Sheet",
-  "👻 Skeleton",
-  "🌀 Spinner",
-  "💡 Switch",
-  "📋 Table",
-  "📑 Tabs",
-  "🔤 Text",
-  "🔥 Toast",
-  "🎚️ Toggle",
-  "🎬 Video",
-  "🧩 View",
 ];

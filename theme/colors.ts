@@ -1,24 +1,36 @@
 import { Platform } from 'react-native';
 
+/**
+ * Echo Design System — "Playful Nocturnal"
+ * 
+ * Inspired by Echo the bat mascot:
+ *   • Deep indigo nights
+ *   • Lavender & violet wings
+ *   • Warm cream belly
+ *   • Rosy pink inner ears
+ *   • Bouncy, cartoonish, Duolingo-style personality
+ * 
+ * Font: Bricolage Grotesque — quirky, chunky, full of character
+ */
+
 export const Fonts = Platform.select({
   ios: {
-    /** iOS `UIFontDescriptorSystemDesignDefault` */
     sans: 'BricolageGrotesque_400Regular',
-    /** iOS `UIFontDescriptorSystemDesignSerif` */
+    sansBold: 'BricolageGrotesque_700Bold',
     serif: 'Georgia',
-    /** iOS `UIFontDescriptorSystemDesignRounded` */
     rounded: 'ui-rounded',
-    /** iOS `UIFontDescriptorSystemDesignMonospaced` */
     mono: 'Menlo',
   },
   default: {
     sans: 'BricolageGrotesque_400Regular',
+    sansBold: 'BricolageGrotesque_700Bold',
     serif: 'Georgia',
     rounded: 'normal',
     mono: 'Menlo',
   },
   web: {
     sans: "'Bricolage Grotesque', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
+    sansBold: "'Bricolage Grotesque', system-ui, sans-serif",
     serif: "Georgia, 'Times New Roman', serif",
     rounded:
       "'SF Pro Rounded', 'Hiragino Maru Gothic ProN', Meiryo, 'MS PGothic', sans-serif",
@@ -26,156 +38,226 @@ export const Fonts = Platform.select({
   },
 });
 
+// ─── Brand Palette ─────────────────────────────────────────
+// Extracted from the Echo bat mascot
+
+export const brand = {
+  // Core indigo/navy — the night sky
+  indigo900: '#13103a',
+  indigo800: '#1c1650',
+  indigo700: '#251d68',
+  indigo600: '#302680',
+  indigo500: '#3d32a0',
+
+  // Lavender/violet — Echo's body
+  lavender900: '#4a3d7a',
+  lavender700: '#6b5d99',
+  lavender500: '#9081b8',
+  lavender400: '#a99bcc',
+  lavender300: '#c4b9e0',
+  lavender200: '#ddd6f0',
+  lavender100: '#efe9f8',
+
+  // Cream/ivory — Echo's belly & wings
+  cream: '#f5f0e3',
+  creamLight: '#faf8f0',
+  creamDark: '#e8e0cc',
+
+  // Rosy pink — Echo's inner ears
+  pink500: '#e8879b',
+  pink400: '#f0a0b2',
+  pink300: '#f5bdc8',
+
+  // Accent colors — fun & cartoonish
+  mint: '#58d4a0',
+  mintLight: '#7de8bb',
+  mintDark: '#3cbf85',
+
+  coral: '#ff7b6b',
+  coralLight: '#ff9e92',
+  coralDark: '#e8574a',
+
+  sunflower: '#ffc63e',
+  sunflowerLight: '#ffd76e',
+  sunflowerDark: '#e8a820',
+
+  sky: '#5cc5ff',
+  skyLight: '#8ed9ff',
+  skyDark: '#3aacf0',
+
+  // Neutrals
+  dark: '#1a1530',
+  darkCard: '#231e42',
+  darkMuted: '#3a3358',
+  darkBorder: '#4a4270',
+};
+
 export const lightColors = {
   // Base colors
-  background: '#f1f0e5',
-  foreground: '#56453f',
+  background: brand.creamLight,
+  foreground: brand.indigo800,
 
   // Card colors
-  card: '#f1f0e5',
-  cardForeground: '#56453f',
+  card: '#ffffff',
+  cardForeground: brand.indigo800,
 
   // Popover colors
   popover: '#ffffff',
-  popoverForeground: '#56453f',
+  popoverForeground: brand.indigo800,
 
-  // Primary colors
-  primary: '#a37764',
+  // Primary colors — rich violet
+  primary: brand.indigo600,
   primaryForeground: '#ffffff',
 
-  // Secondary colors
-  secondary: '#baab92',
-  secondaryForeground: '#ffffff',
+  // Secondary colors — soft lavender
+  secondary: brand.lavender200,
+  secondaryForeground: brand.indigo700,
 
   // Muted colors
-  muted: '#e4c7b8',
-  mutedForeground: '#8a655a',
+  muted: brand.lavender100,
+  mutedForeground: brand.lavender700,
 
-  // Accent colors
-  accent: '#e4c7b8',
-  accentForeground: '#56453f',
+  // Accent colors — warm pink
+  accent: brand.pink400,
+  accentForeground: '#ffffff',
 
   // Destructive colors
-  destructive: '#1f1a17',
+  destructive: brand.coralDark,
   destructiveForeground: '#ffffff',
 
+  // Success colors
+  success: brand.mint,
+  successForeground: '#ffffff',
+
+  // Warning colors
+  warning: brand.sunflower,
+  warningForeground: brand.indigo800,
+
+  // Info colors
+  info: brand.sky,
+  infoForeground: '#ffffff',
+
   // Border and input
-  border: '#baab92',
-  input: '#baab92',
-  ring: '#a37764',
+  border: brand.lavender300,
+  input: brand.lavender200,
+  ring: brand.indigo500,
 
   // Text colors
-  text: '#56453f',
-  textMuted: '#8a655a',
+  text: brand.indigo800,
+  textMuted: brand.lavender700,
 
   // Legacy support for existing components
-  tint: '#a37764',
-  icon: '#8a655a',
-  tabIconDefault: '#8a655a',
-  tabIconSelected: '#a37764',
+  tint: brand.indigo600,
+  icon: brand.lavender700,
+  tabIconDefault: brand.lavender500,
+  tabIconSelected: brand.indigo600,
 
-  // Default buttons, links, Send button, selected tabs
-  blue: '#a37764',
+  // Semantic accent colors
+  blue: brand.sky,
+  green: brand.mint,
+  red: brand.coral,
+  orange: brand.sunflower,
+  yellow: brand.sunflowerLight,
+  pink: brand.pink500,
+  purple: brand.lavender500,
+  teal: brand.mintLight,
+  indigo: brand.indigo500,
 
-  // Success states, FaceTime buttons, completed tasks
-  green: '#34C759',
+  // Echo-specific brand tokens
+  echoBody: brand.lavender500,
+  echoBelly: brand.cream,
+  echoEar: brand.pink400,
+  echoNight: brand.indigo800,
 
-  // Delete buttons, error states, critical alerts
-  red: '#1f1a17',
-
-  // VoiceOver highlights, warning states
-  orange: '#FF9500',
-
-  // Notes app accent, Reminders highlights
-  yellow: '#FFCC00',
-
-  // Pink accent color for various UI elements
-  pink: '#FF2D92',
-
-  // Purple accent for creative apps and features
-  purple: '#AF52DE',
-
-  // Teal accent for communication features
-  teal: '#5AC8FA',
-
-  // Indigo accent for system features
-  indigo: '#5856D6',
+  // Streak / gamification
+  streakActive: brand.sunflower,
+  streakInactive: brand.lavender200,
+  xpGain: brand.mint,
+  levelBadge: brand.indigo500,
 };
 
 export const darkColors = {
-  // Base colors
-  background: '#2d2521',
-  foreground: '#f1f0e5',
+  // Base colors — deep midnight
+  background: brand.dark,
+  foreground: brand.cream,
 
   // Card colors
-  card: '#3c332e',
-  cardForeground: '#f1f0e5',
+  card: brand.darkCard,
+  cardForeground: brand.cream,
 
   // Popover colors
-  popover: '#3c332e',
-  popoverForeground: '#f1f0e5',
+  popover: brand.darkCard,
+  popoverForeground: brand.cream,
 
-  // Primary colors
-  primary: '#c39e88',
-  primaryForeground: '#2d2521',
+  // Primary colors — bright lavender on dark
+  primary: brand.lavender400,
+  primaryForeground: brand.dark,
 
   // Secondary colors
-  secondary: '#8a655a',
-  secondaryForeground: '#f1f0e5',
+  secondary: brand.darkMuted,
+  secondaryForeground: brand.lavender200,
 
   // Muted colors
-  muted: '#56453f',
-  mutedForeground: '#c5aa9b',
+  muted: brand.darkMuted,
+  mutedForeground: brand.lavender300,
 
-  // Accent colors
-  accent: '#baab92',
-  accentForeground: '#2d2521',
+  // Accent colors — bright pink
+  accent: brand.pink500,
+  accentForeground: '#ffffff',
 
   // Destructive colors
-  destructive: '#e57373',
-  destructiveForeground: '#2d2521',
+  destructive: brand.coral,
+  destructiveForeground: brand.dark,
 
-  // Border and input - using alpha values for better blending
-  border: '#56453f',
-  input: '#56453f',
-  ring: '#c39e88',
+  // Success colors
+  success: brand.mintLight,
+  successForeground: brand.dark,
+
+  // Warning colors
+  warning: brand.sunflowerLight,
+  warningForeground: brand.dark,
+
+  // Info colors
+  info: brand.skyLight,
+  infoForeground: brand.dark,
+
+  // Border and input
+  border: brand.darkBorder,
+  input: brand.darkMuted,
+  ring: brand.lavender400,
 
   // Text colors
-  text: '#f1f0e5',
-  textMuted: '#c5aa9b',
+  text: brand.cream,
+  textMuted: brand.lavender300,
 
-  // Legacy support for existing components
-  tint: '#f1f0e5',
-  icon: '#c5aa9b',
-  tabIconDefault: '#c5aa9b',
-  tabIconSelected: '#f1f0e5',
+  // Legacy support
+  tint: brand.lavender300,
+  icon: brand.lavender300,
+  tabIconDefault: brand.lavender500,
+  tabIconSelected: brand.lavender300,
 
-  // Default buttons, links, Send button, selected tabs
-  blue: '#c39e88',
+  // Semantic accent colors
+  blue: brand.skyLight,
+  green: brand.mintLight,
+  red: brand.coralLight,
+  orange: brand.sunflowerLight,
+  yellow: brand.sunflowerLight,
+  pink: brand.pink400,
+  purple: brand.lavender400,
+  teal: brand.mintLight,
+  indigo: brand.lavender400,
 
-  // Success states, FaceTime buttons, completed tasks
-  green: '#30D158',
+  // Echo-specific brand tokens
+  echoBody: brand.lavender400,
+  echoBelly: brand.creamDark,
+  echoEar: brand.pink400,
+  echoNight: brand.indigo900,
 
-  // Delete buttons, error states, critical alerts
-  red: '#e57373',
-
-  // VoiceOver highlights, warning states
-  orange: '#FF9F0A',
-
-  // Notes app accent, Reminders highlights
-  yellow: '#FFD60A',
-
-  // Pink accent color for various UI elements
-  pink: '#FF375F',
-
-  // Purple accent for creative apps and features
-  purple: '#BF5AF2',
-
-  // Teal accent for communication features
-  teal: '#64D2FF',
-
-  // Indigo accent for system features
-  indigo: '#5E5CE6',
+  // Streak / gamification
+  streakActive: brand.sunflower,
+  streakInactive: brand.darkMuted,
+  xpGain: brand.mintLight,
+  levelBadge: brand.lavender400,
 };
 
 export const Colors = {

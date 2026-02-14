@@ -2,7 +2,16 @@ import { Icon } from '@/components/ui/icon';
 import { ButtonSpinner, SpinnerVariant } from '@/components/ui/spinner';
 import { Text } from '@/components/ui/text';
 import { useColor } from '@/hooks/useColor';
-import { CORNERS, FONT_SIZE, HEIGHT } from '@/theme/globals';
+import {
+  CORNERS,
+  FONT_SIZE,
+  HEIGHT,
+  HEIGHT_SM,
+  HEIGHT_LG,
+  BORDER_WIDTH,
+  SPRING_BOUNCY,
+  SPRING_RESPONSIVE,
+} from '@/theme/globals';
 import * as Haptics from 'expo-haptics';
 import { LucideProps } from 'lucide-react-native';
 import { forwardRef } from 'react';
@@ -20,6 +29,15 @@ import Animated, {
   withSpring,
 } from 'react-native-reanimated';
 
+/**
+ * Echo Button Component
+ * 
+ * Duolingo-inspired chunky 3D buttons.
+ * Default buttons have a bold bottom shadow/border that
+ * compresses on press — feels like pushing a real button.
+ * Everything bounces with spring animations.
+ */
+
 export type ButtonVariant =
   | 'default'
   | 'destructive'
@@ -27,7 +45,8 @@ export type ButtonVariant =
   | 'outline'
   | 'secondary'
   | 'ghost'
-  | 'link';
+  | 'link'
+  | 'accent';
 
 export type ButtonSize = 'default' | 'sm' | 'lg' | 'icon';
 
@@ -70,14 +89,17 @@ export const Button = forwardRef<View, ButtonProps>(
     const primaryForegroundColor = useColor('primaryForeground');
     const secondaryColor = useColor('secondary');
     const secondaryForegroundColor = useColor('secondaryForeground');
-    const destructiveColor = useColor('red');
+    const accentColor = useColor('accent');
+    const accentForegroundColor = useColor('accentForeground');
+    const destructiveColor = useColor('destructive');
     const destructiveForegroundColor = useColor('destructiveForeground');
-    const greenColor = useColor('green');
+    const successColor = useColor('success');
     const borderColor = useColor('border');
+    const textColor = useColor('text');
 
-    // Animation values for liquid glass effect
+    // Bouncy animation values
     const scale = useSharedValue(1);
-    const brightness = useSharedValue(1);
+    const translateY = useSharedValue(0);
 
     const getButtonStyle = (): ViewStyle => {
       const baseStyle: ViewStyle = {
@@ -85,15 +107,24 @@ export const Button = forwardRef<View, ButtonProps>(
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
+        borderCurve: 'continuous',
       };
 
-      // Size variants
+      // Size variants — chunky sizes
       switch (size) {
         case 'sm':
-          Object.assign(baseStyle, { height: 44, paddingHorizontal: 24 });
+          Object.assign(baseStyle, {
+            height: HEIGHT_SM,
+            paddingHorizontal: 20,
+            borderRadius: CORNERS - 2,
+          });
           break;
         case 'lg':
-          Object.assign(baseStyle, { height: 54, paddingHorizontal: 36 });
+          Object.assign(baseStyle, {
+            height: HEIGHT_LG,
+            paddingHorizontal: 36,
+            borderRadius: CORNERS + 2,
+          });
           break;
         case 'icon':
           Object.assign(baseStyle, {
@@ -103,24 +134,49 @@ export const Button = forwardRef<View, ButtonProps>(
           });
           break;
         default:
-          Object.assign(baseStyle, { height: HEIGHT, paddingHorizontal: 32 });
+          Object.assign(baseStyle, {
+            height: HEIGHT,
+            paddingHorizontal: 28,
+          });
       }
 
-      // Variant styles
+      // Variant styles — Duolingo-style with bold bottom borders
       switch (variant) {
         case 'destructive':
-          return { ...baseStyle, backgroundColor: destructiveColor };
+          return {
+            ...baseStyle,
+            backgroundColor: destructiveColor,
+            borderBottomWidth: BORDER_WIDTH + 1,
+            borderBottomColor: darkenColor(destructiveColor, 0.25),
+          };
         case 'success':
-          return { ...baseStyle, backgroundColor: greenColor };
+          return {
+            ...baseStyle,
+            backgroundColor: successColor,
+            borderBottomWidth: BORDER_WIDTH + 1,
+            borderBottomColor: darkenColor(successColor, 0.25),
+          };
+        case 'accent':
+          return {
+            ...baseStyle,
+            backgroundColor: accentColor,
+            borderBottomWidth: BORDER_WIDTH + 1,
+            borderBottomColor: darkenColor(accentColor, 0.25),
+          };
         case 'outline':
           return {
             ...baseStyle,
             backgroundColor: 'transparent',
-            borderWidth: 1,
-            borderColor,
+            borderWidth: BORDER_WIDTH,
+            borderColor: borderColor,
           };
         case 'secondary':
-          return { ...baseStyle, backgroundColor: secondaryColor };
+          return {
+            ...baseStyle,
+            backgroundColor: secondaryColor,
+            borderBottomWidth: BORDER_WIDTH,
+            borderBottomColor: darkenColor(secondaryColor, 0.15),
+          };
         case 'ghost':
           return { ...baseStyle, backgroundColor: 'transparent' };
         case 'link':
@@ -131,23 +187,31 @@ export const Button = forwardRef<View, ButtonProps>(
             paddingHorizontal: 0,
           };
         default:
-          return { ...baseStyle, backgroundColor: primaryColor };
+          return {
+            ...baseStyle,
+            backgroundColor: primaryColor,
+            borderBottomWidth: BORDER_WIDTH + 1,
+            borderBottomColor: darkenColor(primaryColor, 0.3),
+          };
       }
     };
 
     const getButtonTextStyle = (): TextStyle => {
       const baseTextStyle: TextStyle = {
-        fontSize: FONT_SIZE,
-        fontWeight: '500',
+        fontSize: size === 'sm' ? FONT_SIZE - 1 : size === 'lg' ? FONT_SIZE + 1 : FONT_SIZE,
+        fontWeight: '700',
+        letterSpacing: 0.3,
       };
 
       switch (variant) {
         case 'destructive':
           return { ...baseTextStyle, color: destructiveForegroundColor };
         case 'success':
-          return { ...baseTextStyle, color: destructiveForegroundColor };
+          return { ...baseTextStyle, color: '#ffffff' };
+        case 'accent':
+          return { ...baseTextStyle, color: accentForegroundColor };
         case 'outline':
-          return { ...baseTextStyle, color: primaryColor };
+          return { ...baseTextStyle, color: textColor };
         case 'secondary':
           return { ...baseTextStyle, color: secondaryForegroundColor };
         case 'ghost':
@@ -168,9 +232,11 @@ export const Button = forwardRef<View, ButtonProps>(
         case 'destructive':
           return destructiveForegroundColor;
         case 'success':
-          return destructiveForegroundColor;
+          return '#ffffff';
+        case 'accent':
+          return accentForegroundColor;
         case 'outline':
-          return primaryColor;
+          return textColor;
         case 'secondary':
           return secondaryForegroundColor;
         case 'ghost':
@@ -182,7 +248,6 @@ export const Button = forwardRef<View, ButtonProps>(
       }
     };
 
-    // Helper function to get icon size based on button size
     const getIconSize = (): number => {
       switch (size) {
         case 'sm':
@@ -190,13 +255,12 @@ export const Button = forwardRef<View, ButtonProps>(
         case 'lg':
           return 24;
         case 'icon':
-          return 20;
+          return 22;
         default:
-          return 18;
+          return 20;
       }
     };
 
-    // Trigger haptic feedback
     const triggerHapticFeedback = () => {
       if (haptic && !disabled && !loading) {
         if (process.env.EXPO_OS === 'ios') {
@@ -205,77 +269,48 @@ export const Button = forwardRef<View, ButtonProps>(
       }
     };
 
-    // Improved animation handlers for liquid glass effect
+    // Bouncy press-in — scale down + shift down (3D button press feel)
     const handlePressIn = (ev?: any) => {
-      'worklet';
-      // Trigger haptic feedback
       triggerHapticFeedback();
 
-      // Scale up with bouncy spring animation
-      scale.value = withSpring(1.05, {
-        damping: 15,
-        stiffness: 400,
-        mass: 0.5,
-      });
+      scale.value = withSpring(0.96, SPRING_RESPONSIVE);
+      translateY.value = withSpring(2, SPRING_RESPONSIVE);
 
-      // Slight brightness increase for glass effect
-      brightness.value = withSpring(1.1, {
-        damping: 20,
-        stiffness: 300,
-      });
-
-      // Call original onPressIn if provided
       props.onPressIn?.(ev);
     };
 
+    // Bouncy press-out — spring back up
     const handlePressOut = (ev?: any) => {
-      'worklet';
-      // Return to original size with smooth spring
-      scale.value = withSpring(1, {
-        damping: 20,
-        stiffness: 400,
-        mass: 0.8,
-        overshootClamping: false,
-      });
+      scale.value = withSpring(1, SPRING_BOUNCY);
+      translateY.value = withSpring(0, SPRING_BOUNCY);
 
-      // Return brightness to normal
-      brightness.value = withSpring(1, {
-        damping: 20,
-        stiffness: 300,
-      });
-
-      // Call original onPressOut if provided
       props.onPressOut?.(ev);
     };
 
-    // Handle actual press action
     const handlePress = () => {
       if (onPress && !disabled && !loading) {
         onPress();
       }
     };
 
-    // Handle press for TouchableOpacity (non-animated version)
     const handleTouchablePress = () => {
       triggerHapticFeedback();
       handlePress();
     };
 
-    // Animated styles using useAnimatedStyle
     const animatedStyle = useAnimatedStyle(() => {
       return {
-        transform: [{ scale: scale.value }],
-        opacity: brightness.value * (disabled ? 0.5 : 1),
+        transform: [
+          { scale: scale.value },
+          { translateY: translateY.value },
+        ],
+        opacity: disabled ? 0.5 : 1,
       };
     });
 
-    // Extract flex value from style prop
     const getFlexFromStyle = () => {
       if (!style) return null;
-
       const styleArray = Array.isArray(style) ? style : [style];
-
-      // Find the last occurrence of flex (in case of multiple styles with flex)
       for (let i = styleArray.length - 1; i >= 0; i--) {
         const s = styleArray[i];
         if (s && typeof s === 'object' && 'flex' in s) {
@@ -285,27 +320,20 @@ export const Button = forwardRef<View, ButtonProps>(
       return null;
     };
 
-    // Alternative simpler solution - replace flex with alignSelf
     const getPressableStyle = (): ViewStyle => {
       const flexValue = getFlexFromStyle();
-      // If flex: 1 is applied, use alignSelf: 'stretch' instead to only affect width
       return flexValue === 1
-        ? {
-            flex: 1,
-            alignSelf: 'stretch',
-          }
+        ? { flex: 1, alignSelf: 'stretch' }
         : flexValue !== null
-        ? {
+          ? {
             flex: flexValue,
-            maxHeight: size === 'sm' ? 44 : size === 'lg' ? 54 : HEIGHT,
+            maxHeight: size === 'sm' ? HEIGHT_SM : size === 'lg' ? HEIGHT_LG : HEIGHT,
           }
-        : {};
+          : {};
     };
 
-    // Updated getStyleWithoutFlex function
     const getStyleWithoutFlex = () => {
       if (!style) return style;
-
       const styleArray = Array.isArray(style) ? style : [style];
       return styleArray.map((s) => {
         if (s && typeof s === 'object' && 'flex' in s) {
@@ -341,7 +369,7 @@ export const Button = forwardRef<View, ButtonProps>(
             />
           ) : typeof children === 'string' ? (
             <View
-              style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}
+              style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}
             >
               {icon && (
                 <Icon name={icon} color={contentColor} size={iconSize} />
@@ -350,7 +378,7 @@ export const Button = forwardRef<View, ButtonProps>(
             </View>
           ) : (
             <View
-              style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}
+              style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}
             >
               {icon && (
                 <Icon name={icon} color={contentColor} size={iconSize} />
@@ -376,7 +404,7 @@ export const Button = forwardRef<View, ButtonProps>(
             color={contentColor}
           />
         ) : typeof children === 'string' ? (
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
             {icon && <Icon name={icon} color={contentColor} size={iconSize} />}
             <Text style={[finalTextStyle, textStyle]}>{children}</Text>
           </View>
@@ -388,5 +416,14 @@ export const Button = forwardRef<View, ButtonProps>(
   }
 );
 
-// Add display name for better debugging
 Button.displayName = 'Button';
+
+// ─── Utility ────────────────────────────────────────────────
+// Simple color darkening for the 3D bottom border effect
+function darkenColor(hex: string, amount: number): string {
+  const num = parseInt(hex.replace('#', ''), 16);
+  const r = Math.max(0, (num >> 16) - Math.round(255 * amount));
+  const g = Math.max(0, ((num >> 8) & 0x00ff) - Math.round(255 * amount));
+  const b = Math.max(0, (num & 0x0000ff) - Math.round(255 * amount));
+  return `#${(r << 16 | g << 8 | b).toString(16).padStart(6, '0')}`;
+}

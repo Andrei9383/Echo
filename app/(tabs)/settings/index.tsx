@@ -6,6 +6,7 @@ import { Text } from '@/components/ui/text';
 import { View } from '@/components/ui/view';
 import { useColor } from '@/hooks/useColor';
 import { Code, Eye, Palette, Settings } from 'lucide-react-native';
+import ShowcaseScreen from '@/components/showcase';
 
 export default function SettingsScreen() {
   const card = useColor('card');
@@ -18,7 +19,7 @@ export default function SettingsScreen() {
       contentContainerStyle={{
         flex: 1,
         gap: 18,
-        paddingTop: 96,
+        paddingTop: 12,
         alignItems: 'center',
       }}
     >
@@ -30,52 +31,7 @@ export default function SettingsScreen() {
           marginBottom: 40,
         }}
       >
-        <Text
-          variant='title'
-          style={{
-            textAlign: 'center',
-            marginBottom: 24,
-            fontWeight: '700',
-          }}
-        >
-          BNA UI Features
-        </Text>
-
-        <View
-          style={{
-            gap: 12,
-          }}
-        >
-          {features.map((feature, index) => (
-            <Card
-              key={index}
-              style={{
-                flexDirection: 'row',
-                alignItems: 'flex-start',
-                gap: 12,
-              }}
-            >
-              <Icon name={feature.icon} size={24} color={primary} />
-
-              <View
-                style={{
-                  flex: 1,
-                }}
-              >
-                <Text
-                  variant='body'
-                  style={{
-                    fontWeight: '600',
-                    marginBottom: 4,
-                  }}
-                >
-                  {feature.title}
-                </Text>
-                <Text variant='caption'>{feature.description}</Text>
-              </View>
-            </Card>
-          ))}
-        </View>
+        <ShowcaseScreen />
       </View>
     </ScrollView>
   );
