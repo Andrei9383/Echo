@@ -114,7 +114,7 @@ export default function RootLayout() {
                 options={{
                   headerShown: false,
                   sheetGrabberVisible: true,
-                  sheetAllowedDetents: [0.4, 0.7, 1],
+                  sheetAllowedDetents: [1],
                   contentStyle: {
                     backgroundColor: isLiquidGlassAvailable()
                       ? "transparent"

@@ -12,6 +12,7 @@ export default function HomeLayout() {
   return (
     <Stack
       screenOptions={{
+        headerShown: false,
         headerLargeTitle: false,
         headerLargeTitleShadowVisible: false,
         headerTransparent: true,
@@ -32,10 +33,10 @@ export default function HomeLayout() {
         name="index"
         options={{
           title: "Home",
-          headerTitle: () =>
-            Platform.OS === "android" ? (
-              <Text variant="heading">Home</Text>
-            ) : undefined,
+          // headerTitle: () =>
+          //   Platform.OS === "android" ? (
+          //     <Text variant="heading">Home</Text>
+          //   ) : undefined,
         }}
       />
     </Stack>

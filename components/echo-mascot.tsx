@@ -136,7 +136,7 @@ export function EchoMascot({
             {/* Mascot image */}
             <Animated.View style={animated ? animatedStyle : undefined}>
                 <Image
-                    source={require('@/assets/images/icon.png')}
+                    source={require('@/assets/images/logo_2.png')}
                     style={{
                         width: size,
                         height: size,

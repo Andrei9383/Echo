@@ -7,6 +7,7 @@ import { useState } from "react";
 import { useDb } from "@/db/provider";
 import { activities } from "@/db/schema";
 import { router } from "expo-router";
+import { insertActivity } from "@/activities/activities";
 
 export default function SheetScreen() {
   const [subcategory, setSubcategory] = useState<string>("");
@@ -62,15 +63,9 @@ export default function SheetScreen() {
                       ?.color
                   }
                   onPress={() => {
-                    db.insert(activities)
-                      .values({
-                        name: subItem,
-                        timestamp: new Date().toISOString(),
-                      })
-                      .then(() => {
-                        setSubcategory("");
-                        router.back();
-                      });
+                    insertActivity(subItem, new Date().toISOString());
+                    setSubcategory("");
+                    router.back();
                   }}
                 />
               ))}
