@@ -24,11 +24,13 @@ import { Suspense } from "react";
 import { Text } from "@/components/ui/text";
 import { ActivityIndicator } from "react-native";
 import { DATABASE_NAME, createDb } from "@/db/provider";
+import useDailyNotification from "@/hooks/useNotifications";
 
 SplashScreen.setOptions({
   duration: 200,
   fade: true,
 });
+
 
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({
@@ -43,6 +45,8 @@ export default function RootLayout() {
   );
 
   const colorScheme = useColorScheme() || "light";
+
+  useDailyNotification();
 
   useEffect(() => {
     if (Platform.OS === "android") {
