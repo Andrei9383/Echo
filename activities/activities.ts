@@ -3,9 +3,67 @@ import { activities, type Activity } from "@/db/schema";
 import { and, gte, lt, lte } from "drizzle-orm";
 import { ActivityIndicatorProperties } from "react-native";
 
+export interface StreakData {
+  day: number,
+  activity: boolean
+}
+
 export function getAllActivities() {
   const db = createDb();
   return db.get(activities);
+}
+
+export function getCountByDay(date: Date) {
+  const db = createDb();
+  const start = new Date(date);
+  const end = new Date(date);
+
+  start.setHours(0, 0, 0);
+  end.setHours(23, 59, 0);
+
+  const result = db.select().from(activities).where(
+    and(
+      gte(activities.timestamp, start.toISOString()),
+      lt(activities.timestamp, end.toISOString())
+    )
+  ).all().length;
+
+  console.log("getCountByDay: ", result);
+
+  return result;
+}
+
+export function getStreak(date: Date, days: number = 3) {
+  const db = createDb();
+
+  const start = new Date(date);
+
+  start.setDate(date.getDate() - 3);
+
+  const result: StreakData[] = [];
+
+  while (start.getDate() != date.getDate()) {
+    const dayBegin = new Date(start);
+    dayBegin.setHours(0, 0);
+    const dayEnd = new Date(start);
+    dayEnd.setHours(23, 59);
+    const hasActivity = db.select().from(activities).where(
+      and(
+        gte(activities.timestamp, dayBegin.toISOString()),
+        lt(activities.timestamp, dayEnd.toISOString())
+      )
+    ).all();
+
+    result.push({
+      day: start.getDay(),
+      activity: hasActivity.length != 0
+    })
+
+    start.setDate(start.getDate() + 1);
+  }
+
+  console.log("getStreak: ", result);
+  return result;
 }
 
 export function insertActivity(name: string, timestamp: string) {
