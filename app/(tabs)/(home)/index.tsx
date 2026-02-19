@@ -28,22 +28,12 @@ import { activityCategories } from "@/components/sheet";
 import { and, gte, lt } from "drizzle-orm";
 import { StreakCounter } from "@/components/ui/streak";
 import { getActivitiesByDay, getCountByDay, getStreak } from "@/activities/activities";
-import { uuid } from "drizzle-orm/pg-core";
-import * as crypto from "expo-crypto";
 import { TimeSlot } from "@/components/time-slot";
 import { Separator } from "@/components/ui/separator";
 import * as Notifications from 'expo-notifications';
 import { StreakData } from "@/activities/activities";
 import { ProgressBar } from "@/components/ui/progress";
 
-function uuidv4() {
-  return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, (c) =>
-    (
-      +c ^
-      (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (+c / 4)))
-    ).toString(16),
-  );
-}
 const getTimeIntervalFromTimestamp = (timestamp: string) => {
   const activityDate = new Date(timestamp);
 
@@ -143,7 +133,7 @@ export default function HomeScreen() {
               const emoji = activityCategories.find((cat) => cat.sub_activities.find((sub) => sub === activity.name))?.emoji;
               return (
                 <TimeSlot
-                  key={uuidv4()}
+                  key={activity.timestamp}
                   timeLabel={getTimeIntervalFromTimestamp(activity.timestamp || "")}
                   activity={activity.name || ""}
                   categoryColor={color}
