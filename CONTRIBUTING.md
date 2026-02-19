@@ -1,12 +1,12 @@
-# Contributing to Activity Tracker
+# Contributing to Echo
 
 First off, thanks for taking the time to contribute! 🎉
 
-The following is a set of guidelines for contributing to Activity Tracker and its packages. These are mostly guidelines, not rules. Use your best judgment, and feel free to propose changes to this document in a pull request.
+The following is a set of guidelines for contributing to Echo and its packages. These are mostly guidelines, not rules. Use your best judgment, and feel free to propose changes to this document in a pull request.
 
 ## Code of Conduct
 
-This project and everyone participating in it is governed by the [Activity Tracker Code of Conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to the project team.
+This project and everyone participating in it is governed by the [Echo Code of Conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to the project team.
 
 ## Getting Started
 
@@ -21,8 +21,8 @@ This project and everyone participating in it is governed by the [Activity Track
 1.  **Fork the repository** on GitHub.
 2.  **Clone your fork** locally:
     ```bash
-    git clone https://github.com/YOUR_USERNAME/bna-app.git
-    cd bna-app
+    git clone https://github.com/Andrei9383/Echo.git
+    cd Echo
     ```
 3.  **Install dependencies**:
     ```bash

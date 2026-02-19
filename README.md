@@ -1,8 +1,10 @@
-# Activity Tracker
+<div align="center">
+  <img src="./assets/images/logo_2.png" alt="Echo Logo" width="150" />
 
-![Logo](./assets/images/logo_2.png)
+  # Echo
 
-A personal activity tracking application built with React Native and Expo, utilizing [BNA UI](https://ui.ahmedbna.com/) components.
+  A personal activity tracking application built with React Native and Expo, utilizing [BNA UI](https://ui.ahmedbna.com/) components.
+</div>
 
 ## Features
 
@@ -33,8 +35,8 @@ A personal activity tracking application built with React Native and Expo, utili
 
 1.  Clone the repository:
     ```bash
-    git clone https://github.com/ahmedbna/bna-app.git
-    cd bna-app
+    git clone https://github.com/Andrei9383/Echo.git
+    cd Echo
     ```
 
 2.  Install dependencies:
@@ -69,4 +71,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-Made with ❤️ by [Ahmed BNA](https://github.com/ahmedbna)
+Made with ❤️ by [Andrei9383](https://github.com/Andrei9383)
