@@ -24,7 +24,7 @@ import { ScrollView } from "@/components/ui/scroll-view";
 import { useEffect, useState } from "react";
 import { useLiveQuery } from "drizzle-orm/expo-sqlite";
 import { BORDER_RADIUS } from "@/theme/globals";
-import { activityCategories } from "@/components/sheet";
+import { activityCategories } from "@/constants/activities";
 import { StreakCounter } from "@/components/ui/streak";
 import { getActivitiesByDay, getCountByDay, getStreak } from "@/activities/activities";
 import { TimeSlot } from "@/components/time-slot";
