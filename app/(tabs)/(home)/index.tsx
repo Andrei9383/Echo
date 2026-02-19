@@ -127,12 +127,12 @@ export default function HomeScreen() {
         <View>
           <Text variant="label" style={{ marginBottom: 12 }}>TODAY</Text>
           <ScrollView>
-            {activityList.map((activity) => {
+            {activityList.map((activity, index) => {
               const color = activityCategories.find((cat) => cat.sub_activities.find((sub) => sub === activity.name))?.color;
               const emoji = activityCategories.find((cat) => cat.sub_activities.find((sub) => sub === activity.name))?.emoji;
               return (
                 <TimeSlot
-                  key={activity.timestamp}
+                  key={activity.id ?? activity.timestamp ?? `slot-${index}`}
                   timeLabel={getTimeIntervalFromTimestamp(activity.timestamp || "")}
                   activity={activity.name || ""}
                   categoryColor={color}
