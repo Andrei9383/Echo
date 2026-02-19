@@ -178,10 +178,6 @@ export function getActivitiesByDay(date: Date) {
       });
     }
     start.setMinutes(start.getMinutes() + 30);
-    if (start.getMinutes() >= 60) {
-      start.setHours(start.getHours() + 1);
-      start.setMinutes(0);
-    }
   }
 
   console.log("getActivitiesByDay: ", result);
