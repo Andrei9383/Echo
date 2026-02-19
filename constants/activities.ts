@@ -166,7 +166,7 @@ export const activityCategories = [
       "Browsing Reddit / Forums",
       "Online Window Shopping",
       "Sorting Digital Files / Photos",
-      "Checkin Emails (Non-work)",
+      "Checking Emails (Non-work)",
     ],
   },
   {
