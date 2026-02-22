@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "bna-app",
-    "slug": "bna-app",
-    "scheme": "bna-app",
+    "name": "Echo",
+    "slug": "echo",
+    "scheme": "echo",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
